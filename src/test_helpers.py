@@ -7,6 +7,7 @@ from helpers import (
     split_nodes_image,
     split_nodes_link,
     text_to_textnodes,
+    markdown_to_blocks,
 )
 
 
@@ -172,6 +173,49 @@ class TestImageLinkFuncs(unittest.TestCase):
                 TextNode("link", TextType.LINK, "https://boot.dev"),
             ],
             text_to_textnodes(input_text),
+        )
+
+
+class TestMarkdownBlockSplits(unittest.TestCase):
+    def test_markdown_to_blocks(self):
+        md = """
+This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is **bolded** paragraph",
+                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                "- This is a list\n- with items",
+            ],
+        )
+        md2 = """
+# This is a heading with a **bolded** word!
+
+This is just a regular paragraph maybe it'll have a [link](https://www.google.com)
+Maybe it might have an image of a cat ![cat image](https://www.cat.com/picture)
+
+\n\n\n\n\n\n\n\n
+
+Then we'll have a final paragraph down here
+"""
+
+        blocks2 = markdown_to_blocks(md2)
+        self.assertEqual(
+            blocks2,
+            [
+                "# This is a heading with a **bolded** word!",
+                "This is just a regular paragraph maybe it'll have a [link](https://www.google.com)\nMaybe it might have an image of a cat ![cat image](https://www.cat.com/picture)",
+                "Then we'll have a final paragraph down here",
+            ],
         )
 
 

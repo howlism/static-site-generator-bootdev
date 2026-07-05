@@ -88,3 +88,14 @@ def text_to_textnodes(text: str) -> list[TextNode]:
         new_nodes = split_nodes_link(new_nodes)
 
     return new_nodes
+
+
+def markdown_to_blocks(text: str) -> list[str]:
+    blocks = text.strip().split("\n\n")
+    output = []
+    for block in blocks:
+        block = block.strip()
+        if block == "":
+            continue
+        output.append(block)
+    return output
