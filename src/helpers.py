@@ -1,4 +1,6 @@
+from blocks import block_to_blocktype
 from textnode import TextNode, TextType
+from htmlnode import HTMLNode
 import re
 
 
@@ -99,3 +101,10 @@ def markdown_to_blocks(text: str) -> list[str]:
             continue
         output.append(block)
     return output
+
+
+def markdown_to_htmlnode(markdown: str) -> HTMLNode:
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        block_type = block_to_blocktype(block)
+        # TODO: Complete this function
