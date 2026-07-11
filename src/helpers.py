@@ -1,4 +1,4 @@
-from blocks import block_to_blocktype
+from blocks import BlockType, block_to_blocktype
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode
 import re
@@ -105,6 +105,26 @@ def markdown_to_blocks(text: str) -> list[str]:
 
 def markdown_to_htmlnode(markdown: str) -> HTMLNode:
     blocks = markdown_to_blocks(markdown)
+    output = HTMLNode()
     for block in blocks:
         block_type = block_to_blocktype(block)
-        # TODO: Complete this function
+        if block_type == BlockType.HEADING:
+            counter = 0
+            for char in block:
+                if char == "#":
+                    counter += 1
+                else:
+                    break
+            output.tag = f"h{counter}"
+        if block_type == BlockType.QUOTE:
+            output.tag = "blockquote"
+        if block_type == BlockType.UNORDERED_LIST:
+            output.tag = "ul"
+        if block_type == BlockType.ORDERED_LIST:
+            output.tag = "ol"
+        if block_type == BlockType.CODE:
+            output.tag = "pre"
+            output.children = [HTMLNode("code", block)]
+        if block_type == BlockType.PARAGRAPH:
+            output.tag = "p"
+        output.children = 
